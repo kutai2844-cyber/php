@@ -1,0 +1,27 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ "main" ] # Action này sẽ chạy mỗi khi bạn đẩy code lên nhánh main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Lấy code về (Checkout)
+      uses: actions/checkout@v3
+
+    - name: 2. Đăng nhập Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: 3. Xây dựng và Đẩy lên (Build & Push)
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        # Thay 'my-php-web' bằng tên bạn vừa đặt ở Bước 1
+        tags: taile1/my-php-web:latest
